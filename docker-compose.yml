@@ -1,0 +1,10 @@
+version: '3.9'
+
+services:
+  plantcare:
+    build: .
+    container_name: plantcare_app
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app

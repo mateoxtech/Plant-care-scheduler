@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Java Script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <title>Popis biljaka</title>
+  </head>
+
+  <body>
+
+    <!-- Navigacijska traka -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+
+        <a class="navbar-brand" href="#">Plant Care Scheduler</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('home') }}">Početna</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('dodaj_biljku') }}">Dodaj biljku</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ url_for('vrati_biljke') }}">Popis biljaka</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('vizualizacija') }}">Zalijevanje po mjesecima</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('biljke_po_vrstama') }}">Biljke po vrsti</a>
+            </li>
+
+          </ul>
+        </div>
+
+      </div>
+    </nav>
+
+    <!-- Body -->
+    <div class="container mt-4">
+      <h2>Popis biljaka</h2>
+
+      <ul class="list-group">
+
+        {% for biljka in data %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+
+          <div>
+            <strong>{{ biljka.naziv }}</strong>
+            <br>
+            <small>
+              Vrsta: {{ biljka.vrsta }} <br>
+              Opis: {{ biljka.opis }} <br>
+              Zadnje zalijevanje: {{ biljka.datum_zalijevanja }} <br>
+              Interval zalijevanja: {{ biljka.interval_zalijevanja }} dana
+            </small>
+          </div>
+
+          <div>
+            
+            <a href="{{ url_for('uredi_biljku_html', biljka_id=biljka.id) }}" class="btn btn-primary btn-sm">Uredi</a>
+
+            <button class="btn btn-danger btn-sm" onclick="obrisiBiljku('{{ biljka.id }}')">Obriši</button>
+
+          </div>
+
+        </li>
+        {% endfor %}
+
+      </ul>
+    </div>
+
+
+    <script>
+      function obrisiBiljku(biljkaId) {
+        if (confirm('Jeste li sigurni da želite obrisati ovu biljku?')) {
+          fetch(`/biljka/${biljkaId}`, { method: 'DELETE' })
+            .then(response => response.json())
+            .then(data => {
+              if (data.response === 'Success') {
+                location.reload();
+              } else {
+                console.error('Greška prilikom brisanja biljke:', data.error);
+              }
+            })
+            .catch(error => console.error('Greška prilikom DELETE zahtjeva:', error));
+        }
+      }
+    </script>
+
+    <!-- Pozadina -->
+    <style>
+      body {
+        background-image: url('{{ url_for("static", filename="pozadina.jpg") }}');
+        background-size: cover;
+        background-repeat: no-repeat;
+      }
+    </style>
+
+  </body>
+</html>
