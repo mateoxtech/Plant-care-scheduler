@@ -29,7 +29,7 @@ Plant care scheduler je web aplikacija koja omogućuje korisnicima upravljanje s
 
 
 ## Usecase dijagram
-![alt text](htpps://github.com/mateoxtech/Plant-care-scheduler/Plant care scheduler_usecase.png)
+![Alt text](https://github.com/mateoxtech/Plant-care-scheduler/Plant care scheduler_usecase.png)
 
 ## Instalacija
 ```
